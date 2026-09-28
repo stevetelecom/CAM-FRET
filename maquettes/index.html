@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CAM-FRET - Maquettes</title>
+  <link rel="icon" href="logo.jpg">
+  <!-- Polices et icônes Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <style>
+    /* ---------- Palette issue du logo CAM-FRET ---------- */
+    :root {
+      --green-dark: #0f5c4d;   /* titre "CAM-FRET" */
+      --green: #3cb54a;        /* anneau vert */
+      --navy: #1b2f6b;         /* arc bleu marine */
+      --gold: #d4a62a;         /* orbites dorées */
+      --bg: #f6faf7;
+      --text: #1c2b33;
+      --muted: #5d6b73;
+    }
+
+    /* ---------- Base ---------- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ---------- Section d'accueil (hero) ---------- */
+    .hero {
+      position: relative;
+      text-align: center;
+      padding: 2.5rem 1rem 6rem;
+      background: linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+      overflow: hidden;
+    }
+    /* Formes floues animées en arrière-plan (couleurs du logo) */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: .28;
+      animation: drift 14s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .blob.b1 { width: 320px; height: 320px; background: var(--green); top: -90px; left: -80px; }
+    .blob.b2 { width: 280px; height: 280px; background: var(--navy);  top: 40px;  right: -90px; animation-delay: -4s; }
+    .blob.b3 { width: 220px; height: 220px; background: var(--gold);  bottom: -60px; left: 40%; animation-delay: -8s; }
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(30px, 24px) scale(1.15); }
+    }
+
+    /* Logo : apparition puis lévitation douce.
+       mix-blend-mode fait disparaître le fond blanc du JPG */
+    .logo {
+      position: relative;
+      z-index: 1;
+      width: clamp(200px, 38vw, 300px);
+      height: auto;
+      mix-blend-mode: multiply;
+      animation: pop .9s cubic-bezier(.2, .8, .2, 1) both, float 5s ease-in-out .9s infinite;
+    }
+    @keyframes pop {
+      from { opacity: 0; transform: scale(.7) rotate(-6deg); }
+      to   { opacity: 1; transform: scale(1) rotate(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+
+    .hero .lead {
+      position: relative;
+      z-index: 1;
+      margin-top: .5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--muted);
+      animation: rise .8s ease .5s both;
+    }
+    /* Trait doré animé sous le titre */
+    .hero .bar {
+      position: relative;
+      z-index: 1;
+      width: 0;
+      height: 4px;
+      margin: 1rem auto 0;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--green), var(--gold), var(--navy));
+      animation: grow 1s ease .8s forwards;
+    }
+    @keyframes grow { to { width: 120px; } }
+
+    /* ---------- Grille de cartes ---------- */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1000px;
+      margin: -3.5rem auto 2.5rem;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card {
+      --accent: var(--green);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: .8rem;
+      padding: 1.9rem 1.7rem 1.6rem;
+      background: #fff;
+      border-radius: 20px;
+      text-decoration: none;
+      color: inherit;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(15, 92, 77, .10);
+      animation: rise .8s ease both;
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+    /* Apparition en cascade */
+    .card:nth-child(1) { animation-delay: .9s; }
+    .card:nth-child(2) { animation-delay: 1.1s; }
+    .card:nth-child(3) { animation-delay: 1.3s; }
+    /* Une couleur du logo par espace */
+    .card.transporteur { --accent: var(--navy); }
+    .card.admin        { --accent: var(--gold); }
+
+    /* Filet de couleur en haut de la carte */
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: var(--accent);
+    }
+    /* Balayage lumineux au survol */
+    .card::after {
+      content: "";
+      position: absolute;
+      top: 0; left: -120%;
+      width: 60%; height: 100%;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,.65), transparent);
+      transform: skewX(-20deg);
+      transition: left .7s ease;
+    }
+    .card:hover, .card:focus-visible {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 44px rgba(27, 47, 107, .18);
+      outline: none;
+    }
+    .card:hover::after { left: 140%; }
+
+    .icon-box {
+      width: 56px; height: 56px;
+      display: grid; place-items: center;
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--accent) 14%, #fff);
+      color: var(--accent);
+      transition: background .3s ease, color .3s ease, transform .3s ease;
+    }
+    .icon-box .material-icons-outlined { font-size: 30px; }
+    .card:hover .icon-box { background: var(--accent); color: #fff; transform: rotate(-8deg) scale(1.08); }
+
+    .card h2 { font-size: 1.2rem; font-weight: 700; color: var(--green-dark); }
+    .card p  { font-size: .9rem; line-height: 1.6; color: var(--muted); }
+    .go {
+      margin-top: auto;
+      display: inline-flex; align-items: center; gap: .3rem;
+      font-size: .9rem; font-weight: 600;
+      color: var(--accent);
+    }
+    .go .material-icons-outlined { transition: transform .3s ease; }
+    .card:hover .go .material-icons-outlined { transform: translateX(6px); }
+
+    /* ---------- Pied de page ---------- */
+    footer {
+      text-align: center;
+      padding: 1.4rem 1rem;
+      background: var(--navy);
+      color: #dbe3f7;
+      font-size: .85rem;
+    }
+    footer strong { color: var(--gold); }
+
+    /* ---------- Mobile ---------- */
+    @media (max-width: 480px) {
+      .hero { padding-bottom: 5rem; }
+    }
+
+    /* Respect des utilisateurs qui désactivent les animations */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .hero .bar { width: 120px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Logo et accroche -->
+  <header class="hero">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+    <img class="logo" src="logo.jpg" alt="Logo CAM-FRET - Logistique et transport en Afrique">
+    <p class="lead">Maquettes de la plateforme</p>
+    <div class="bar"></div>
+  </header>
+
+  <!-- Les trois espaces -->
+  <main>
+    <a class="card client" href="client.html">
+      <span class="icon-box"><span class="material-icons-outlined">person</span></span>
+      <h2>Espace client</h2>
+      <p>Publier une demande de transport et suivre ses expéditions.</p>
+      <span class="go">Ouvrir <span class="material-icons-outlined">arrow_forward</span></span>
+    </a>
+
+    <a class="card transporteur" href="transporteur.html">
+      <span class="icon-box"><span class="material-icons-outlined">local_shipping</span></span>
+      <h2>Espace transporteur</h2>
+      <p>Consulter les offres, gérer sa flotte et ses trajets.</p>
+      <span class="go">Ouvrir <span class="material-icons-outlined">arrow_forward</span></span>
+    </a>
+
+    <a class="card admin" href="admin.html">
+      <span class="icon-box"><span class="material-icons-outlined">admin_panel_settings</span></span>
+      <h2>Espace admin</h2>
+      <p>Superviser les utilisateurs, les missions et les paiements.</p>
+      <span class="go">Ouvrir <span class="material-icons-outlined">arrow_forward</span></span>
+    </a>
+  </main>
+
+  <footer>
+    <strong>CAM-FRET</strong> - Votre fret, notre mission &copy; 2026
+  </footer>
+</body>
+</html>
